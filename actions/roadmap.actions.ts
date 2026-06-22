@@ -60,7 +60,11 @@ const syllabusOrderMaps = (() => {
 })();
 
 function getSyllabusSubjectOrder(subjectName: string) {
-  return syllabusOrderMaps.subjectOrder.get(displayGateSubjectName(normalizeGateSubjectName(subjectName))) ?? Number.MAX_SAFE_INTEGER;
+  return (
+    syllabusOrderMaps.subjectOrder.get(
+      displayGateSubjectName(normalizeGateSubjectName(subjectName)),
+    ) ?? Number.MAX_SAFE_INTEGER
+  );
 }
 
 function getSyllabusTopicOrder(subjectName: string, topicName: string) {
@@ -70,11 +74,17 @@ function getSyllabusTopicOrder(subjectName: string, topicName: string) {
 
 function getSyllabusSubtopicOrder(subjectName: string, topicName: string, subtopicName: string) {
   const subjectKey = displayGateSubjectName(normalizeGateSubjectName(subjectName));
-  return syllabusOrderMaps.subtopicOrder.get(`${subjectKey}::${topicName}::${subtopicName}`) ?? Number.MAX_SAFE_INTEGER;
+  return (
+    syllabusOrderMaps.subtopicOrder.get(`${subjectKey}::${topicName}::${subtopicName}`) ??
+    Number.MAX_SAFE_INTEGER
+  );
 }
 
 function mergeStatus(statuses: ProgressStatus[]) {
-  return statuses.reduce((best, status) => (statusRank[status] > statusRank[best] ? status : best), "NOT_STARTED");
+  return statuses.reduce(
+    (best, status) => (statusRank[status] > statusRank[best] ? status : best),
+    "NOT_STARTED",
+  );
 }
 
 async function normalizeDuplicateTasks(roadmapId: string) {
@@ -105,9 +115,14 @@ async function normalizeDuplicateTasks(roadmapId: string) {
   await prisma.$transaction(async (tx) => {
     for (const group of duplicateGroups) {
       const [keep, ...extras] = group;
-      const notes = [...new Set(group.map((task) => task.notes?.trim()).filter(Boolean))].join("\n");
-      const actualMinutes = group.reduce((total, task) => total + (task.actualMinutes ?? 0), 0) || null;
-      const selfRatings = group.map((task) => task.selfRating).filter((rating): rating is number => typeof rating === "number");
+      const notes = [...new Set(group.map((task) => task.notes?.trim()).filter(Boolean))].join(
+        "\n",
+      );
+      const actualMinutes =
+        group.reduce((total, task) => total + (task.actualMinutes ?? 0), 0) || null;
+      const selfRatings = group
+        .map((task) => task.selfRating)
+        .filter((rating): rating is number => typeof rating === "number");
       const selfRating = selfRatings.length ? Math.max(...selfRatings) : null;
       const titles = [...new Set(group.map((task) => task.title.trim()).filter(Boolean))];
 
@@ -194,7 +209,9 @@ export async function calculateSheetPreview(formData: FormData) {
     strongSubjects,
     weakSubjects,
     aggression: ["LOOSE", "BALANCED", "AGGRESSIVE"].includes(aggression) ? aggression : "BALANCED",
-    parallelSubjects: [1, 2, 3].includes(parallelSubjects) ? (parallelSubjects as ParallelSubjects) : 1,
+    parallelSubjects: [1, 2, 3].includes(parallelSubjects)
+      ? (parallelSubjects as ParallelSubjects)
+      : 1,
   });
 }
 
@@ -311,7 +328,9 @@ export async function getSubjectProgress(userId: string) {
   if (!roadmap) return [];
   await refreshRoadmapProgress(roadmap.id);
 
-  const orderMap = new Map<string, number>(recommendedSubjectOrder.map((subject, index) => [subject, index]));
+  const orderMap = new Map<string, number>(
+    recommendedSubjectOrder.map((subject, index) => [subject, index]),
+  );
   const rows = await prisma.subjectProgress.findMany({
     where: { userRoadmapId: roadmap.id },
     select: {
@@ -327,8 +346,12 @@ export async function getSubjectProgress(userId: string) {
     },
   });
   return rows.sort((left, right) => {
-    const leftOrder = orderMap.get(displayGateSubjectName(normalizeGateSubjectName(left.subjectName))) ?? Number.MAX_SAFE_INTEGER;
-    const rightOrder = orderMap.get(displayGateSubjectName(normalizeGateSubjectName(right.subjectName))) ?? Number.MAX_SAFE_INTEGER;
+    const leftOrder =
+      orderMap.get(displayGateSubjectName(normalizeGateSubjectName(left.subjectName))) ??
+      Number.MAX_SAFE_INTEGER;
+    const rightOrder =
+      orderMap.get(displayGateSubjectName(normalizeGateSubjectName(right.subjectName))) ??
+      Number.MAX_SAFE_INTEGER;
     return leftOrder - rightOrder;
   });
 }
@@ -369,8 +392,16 @@ export async function getSubtopicProgress(userId: string) {
     const rightTopicOrder = getSyllabusTopicOrder(right.subjectName, right.topicName);
     if (leftTopicOrder !== rightTopicOrder) return leftTopicOrder - rightTopicOrder;
 
-    const leftSubtopicOrder = getSyllabusSubtopicOrder(left.subjectName, left.topicName, left.subtopicName);
-    const rightSubtopicOrder = getSyllabusSubtopicOrder(right.subjectName, right.topicName, right.subtopicName);
+    const leftSubtopicOrder = getSyllabusSubtopicOrder(
+      left.subjectName,
+      left.topicName,
+      left.subtopicName,
+    );
+    const rightSubtopicOrder = getSyllabusSubtopicOrder(
+      right.subjectName,
+      right.topicName,
+      right.subtopicName,
+    );
     return leftSubtopicOrder - rightSubtopicOrder;
   });
 }
@@ -406,11 +437,22 @@ export async function getRoadmapSheet(userId: string) {
     const rightTopicOrder = getSyllabusTopicOrder(right.subjectName, right.topicName);
     if (leftTopicOrder !== rightTopicOrder) return leftTopicOrder - rightTopicOrder;
 
-    const leftSubtopicOrder = getSyllabusSubtopicOrder(left.subjectName, left.topicName, left.subtopicName);
-    const rightSubtopicOrder = getSyllabusSubtopicOrder(right.subjectName, right.topicName, right.subtopicName);
+    const leftSubtopicOrder = getSyllabusSubtopicOrder(
+      left.subjectName,
+      left.topicName,
+      left.subtopicName,
+    );
+    const rightSubtopicOrder = getSyllabusSubtopicOrder(
+      right.subjectName,
+      right.topicName,
+      right.subtopicName,
+    );
     if (leftSubtopicOrder !== rightSubtopicOrder) return leftSubtopicOrder - rightSubtopicOrder;
 
-    return (left.plannedDate?.getTime() ?? Number.MAX_SAFE_INTEGER) - (right.plannedDate?.getTime() ?? Number.MAX_SAFE_INTEGER);
+    return (
+      (left.plannedDate?.getTime() ?? Number.MAX_SAFE_INTEGER) -
+      (right.plannedDate?.getTime() ?? Number.MAX_SAFE_INTEGER)
+    );
   });
 
   const tasks = await prisma.roadmapTask.findMany({
