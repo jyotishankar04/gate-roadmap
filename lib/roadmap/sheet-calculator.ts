@@ -93,19 +93,19 @@ type SubjectSeed = {
 export const DEFAULT_GATE_2027_EXAM_DATE = "2027-02-01";
 
 export const recommendedSubjectOrder = [
+  "General Aptitude",
+  "Engineering Mathematics",
+  "Discrete Mathematics",
   "C Programming",
+  "Digital Logic",
   "Data Structures",
   "Algorithms",
-  "Discrete Mathematics",
-  "Digital Logic",
+  "Theory of Computation",
   "Computer Organization and Architecture",
   "Operating Systems",
   "Database Management Systems",
-  "Computer Networks",
-  "Theory of Computation",
   "Compiler Design",
-  "Engineering Mathematics",
-  "General Aptitude",
+  "Computer Networks",
   "English / Verbal Ability",
 ] as const;
 
@@ -128,26 +128,26 @@ export function displayGateSubjectName(name: string) {
 }
 
 const subjectSeeds: SubjectSeed[] = [
-  { displayName: "C Programming", canonicalName: "C Programming", order: 1, baseDays: 8, priority: "MEDIUM", weight: 6 },
-  { displayName: "Data Structures", canonicalName: "Data Structures", order: 2, baseDays: 14, priority: "VERY_HIGH", weight: 10 },
-  { displayName: "Algorithms", canonicalName: "Algorithms", order: 3, baseDays: 12, priority: "VERY_HIGH", weight: 8 },
-  { displayName: "Discrete Mathematics", canonicalName: "Discrete Mathematics", order: 4, baseDays: 12, priority: "HIGH", weight: 7 },
+  { displayName: "General Aptitude", canonicalName: "General Aptitude", order: 1, baseDays: 0, priority: "VERY_HIGH", weight: 15, distributedDaily: true },
+  { displayName: "Engineering Mathematics", canonicalName: "Engineering Mathematics", order: 2, baseDays: 14, priority: "VERY_HIGH", weight: 13 },
+  { displayName: "Discrete Mathematics", canonicalName: "Discrete Mathematics", order: 3, baseDays: 12, priority: "HIGH", weight: 7 },
+  { displayName: "C Programming", canonicalName: "C Programming", order: 4, baseDays: 8, priority: "MEDIUM", weight: 6 },
   { displayName: "Digital Logic", canonicalName: "Digital Logic", order: 5, baseDays: 7, priority: "MEDIUM", weight: 5 },
+  { displayName: "Data Structures", canonicalName: "Data Structures", order: 6, baseDays: 14, priority: "VERY_HIGH", weight: 10 },
+  { displayName: "Algorithms", canonicalName: "Algorithms", order: 7, baseDays: 12, priority: "VERY_HIGH", weight: 8 },
+  { displayName: "Theory of Computation", canonicalName: "Theory of Computation", order: 8, baseDays: 14, priority: "HIGH", weight: 7 },
   {
     displayName: "Computer Organization and Architecture",
     canonicalName: "Computer Organization and Architecture",
-    order: 6,
+    order: 9,
     baseDays: 12,
     priority: "HIGH",
     weight: 7,
   },
-  { displayName: "Operating Systems", canonicalName: "Operating Systems", order: 7, baseDays: 14, priority: "VERY_HIGH", weight: 9 },
-  { displayName: "Database Management Systems", canonicalName: "DBMS", order: 8, baseDays: 12, priority: "VERY_HIGH", weight: 8 },
-  { displayName: "Computer Networks", canonicalName: "Computer Networks", order: 9, baseDays: 14, priority: "VERY_HIGH", weight: 9 },
-  { displayName: "Theory of Computation", canonicalName: "Theory of Computation", order: 10, baseDays: 14, priority: "HIGH", weight: 7 },
-  { displayName: "Compiler Design", canonicalName: "Compiler Design", order: 11, baseDays: 7, priority: "MEDIUM", weight: 4 },
-  { displayName: "Engineering Mathematics", canonicalName: "Engineering Mathematics", order: 12, baseDays: 14, priority: "VERY_HIGH", weight: 13 },
-  { displayName: "General Aptitude", canonicalName: "General Aptitude", order: 13, baseDays: 0, priority: "VERY_HIGH", weight: 15, distributedDaily: true },
+  { displayName: "Operating Systems", canonicalName: "Operating Systems", order: 10, baseDays: 14, priority: "VERY_HIGH", weight: 9 },
+  { displayName: "Database Management Systems", canonicalName: "DBMS", order: 11, baseDays: 12, priority: "VERY_HIGH", weight: 8 },
+  { displayName: "Compiler Design", canonicalName: "Compiler Design", order: 12, baseDays: 7, priority: "MEDIUM", weight: 4 },
+  { displayName: "Computer Networks", canonicalName: "Computer Networks", order: 13, baseDays: 14, priority: "VERY_HIGH", weight: 9 },
   { displayName: "English / Verbal Ability", canonicalName: "English", order: 14, baseDays: 0, priority: "HIGH", weight: 0, distributedDaily: true },
 ];
 
